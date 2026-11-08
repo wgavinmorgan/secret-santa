@@ -82,15 +82,16 @@
 
     <!-- SETUP VIEW -->
     <div id="view-setup" class="space-y-6">
+      
+      <!-- Add Participants -->
       <div class="glass-card rounded-2xl p-6 border-t-4 border-xmas-green">
         <div class="flex justify-between items-center mb-4 border-b pb-3">
-          <h2 class="text-xl font-bold text-xmas-green">Add Participants</h2>
+          <h2 class="text-xl font-bold text-xmas-green">1. Add Participants</h2>
           <button onclick="app.clearAll()" class="text-xs text-red-600 font-semibold">Clear All Names</button>
         </div>
 
-        <!-- Add Form -->
         <div class="flex flex-col sm:flex-row gap-2 mb-6">
-          <input type="text" id="new-name" placeholder="Member Name (e.g. Gavin)" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
+          <input type="text" id="new-name" placeholder="Member Name" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
           <input type="text" id="new-wishlist" placeholder="Optional Wishlist / Hint" class="sm:w-1/3 px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
           <button type="button" onclick="app.addParticipant()" class="bg-xmas-green hover:bg-emerald-800 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition">
             Add Person
@@ -100,6 +101,31 @@
         <div id="participants-list" class="space-y-2 max-h-64 overflow-y-auto"></div>
       </div>
 
+      <!-- Exclusion Rules -->
+      <div class="glass-card rounded-2xl p-6 border-t-4 border-xmas-gold">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-xl font-bold text-slate-800">2. Exclusion Rules (Optional)</h2>
+          <span id="rules-count" class="text-xs bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full font-bold">0 Rules</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-4">Prevent spouses, partners, or specific people from drawing each other.</p>
+
+        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex flex-col sm:flex-row items-center gap-2 mb-4">
+          <select id="rule-person-a" class="w-full sm:w-1/2 text-sm px-3 py-2 rounded-lg border border-slate-300 bg-white">
+            <option value="">Select Person</option>
+          </select>
+          <span class="text-xs font-bold text-red-500 uppercase">cannot draw</span>
+          <select id="rule-person-b" class="w-full sm:w-1/2 text-sm px-3 py-2 rounded-lg border border-slate-300 bg-white">
+            <option value="">Select Person</option>
+          </select>
+          <button type="button" onclick="app.addExclusionRule()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-900 text-white font-medium px-4 py-2 rounded-lg text-sm transition shrink-0">
+            Add Rule
+          </button>
+        </div>
+
+        <div id="rules-list" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- Draw CTA Button -->
       <div class="text-center pt-2">
         <button onclick="app.generateDraw()" class="bg-xmas-red hover:bg-red-700 text-white text-lg font-bold px-10 py-4 rounded-2xl shadow-xl transition">
           Perform Christmas Draw!
@@ -159,6 +185,7 @@
     class SecretSantaApp {
       constructor() {
         this.participants = [];
+        this.exclusions = [];
         this.matches = {};
         this.init();
       }
@@ -166,30 +193,37 @@
       init() {
         this.loadState();
         this.renderParticipants();
+        this.renderDropdowns();
+        this.renderExclusions();
         this.checkURLForReveal();
       }
 
       loadState() {
-        const saved = localStorage.getItem('morgan_santa_participants');
+        const saved = localStorage.getItem('morgan_santa_data');
         if (saved) {
-          this.participants = JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          this.participants = parsed.participants || [];
+          this.exclusions = parsed.exclusions || [];
         } else {
-          this.participants = [
-            { id: '1', name: 'Gavin', wishlist: '' },
-            { id: '2', name: 'Morgan', wishlist: '' },
-            { id: '3', name: 'Alex', wishlist: '' }
-          ];
+          this.participants = [];
+          this.exclusions = [];
         }
       }
 
       saveState() {
-        localStorage.setItem('morgan_santa_participants', JSON.stringify(this.participants));
+        localStorage.setItem('morgan_santa_data', JSON.stringify({
+          participants: this.participants,
+          exclusions: this.exclusions
+        }));
       }
 
       clearAll() {
         this.participants = [];
+        this.exclusions = [];
         this.saveState();
         this.renderParticipants();
+        this.renderDropdowns();
+        this.renderExclusions();
       }
 
       addParticipant() {
@@ -207,12 +241,16 @@
         wishlistInput.value = '';
         this.saveState();
         this.renderParticipants();
+        this.renderDropdowns();
       }
 
       removeParticipant(id) {
         this.participants = this.participants.filter(p => p.id !== id);
+        this.exclusions = this.exclusions.filter(e => e.fromId !== id && e.toId !== id);
         this.saveState();
         this.renderParticipants();
+        this.renderDropdowns();
+        this.renderExclusions();
       }
 
       renderParticipants() {
@@ -234,6 +272,73 @@
         `).join('');
       }
 
+      renderDropdowns() {
+        const selectA = document.getElementById('rule-person-a');
+        const selectB = document.getElementById('rule-person-b');
+
+        const options = '<option value="">Select Person</option>' + 
+          this.participants.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+
+        selectA.innerHTML = options;
+        selectB.innerHTML = options;
+      }
+
+      addExclusionRule() {
+        const fromId = document.getElementById('rule-person-a').value;
+        const toId = document.getElementById('rule-person-b').value;
+
+        if (!fromId || !toId) {
+          alert('Please select two people to create a rule.');
+          return;
+        }
+
+        if (fromId === toId) {
+          alert('A person already cannot draw themselves!');
+          return;
+        }
+
+        const exists = this.exclusions.some(e => e.fromId === fromId && e.toId === toId);
+        if (exists) {
+          alert('This rule already exists.');
+          return;
+        }
+
+        this.exclusions.push({ fromId, toId });
+        this.saveState();
+        this.renderExclusions();
+      }
+
+      removeExclusion(index) {
+        this.exclusions.splice(index, 1);
+        this.saveState();
+        this.renderExclusions();
+      }
+
+      renderExclusions() {
+        const container = document.getElementById('rules-list');
+        const countBadge = document.getElementById('rules-count');
+        countBadge.innerText = `${this.exclusions.length} Rules`;
+
+        if (this.exclusions.length === 0) {
+          container.innerHTML = `<span class="text-xs text-slate-400 italic">No restrictions added. Anyone can draw anyone.</span>`;
+          return;
+        }
+
+        container.innerHTML = this.exclusions.map((e, index) => {
+          const personA = this.participants.find(p => p.id === e.fromId);
+          const personB = this.participants.find(p => p.id === e.toId);
+          const nameA = personA ? personA.name : 'Unknown';
+          const nameB = personB ? personB.name : 'Unknown';
+
+          return `
+            <div class="bg-amber-100/80 border border-amber-300 text-amber-900 text-xs px-3 py-1.5 rounded-full flex items-center gap-2">
+              <span><b>${nameA}</b> ❌ <b>${nameB}</b></span>
+              <button onclick="app.removeExclusion(${index})" class="text-amber-700 hover:text-red-700 font-bold">✕</button>
+            </div>
+          `;
+        }).join('');
+      }
+
       generateDraw() {
         if (this.participants.length < 3) {
           alert('Please add at least 3 people to perform a Secret Santa draw.');
@@ -244,23 +349,35 @@
         let valid = false;
         let attempts = 0;
 
-        while (!valid && attempts < 100) {
+        while (!valid && attempts < 500) {
           attempts++;
           valid = true;
           receivers = [...this.participants].sort(() => Math.random() - 0.5);
           this.matches = {};
 
           for (let i = 0; i < this.participants.length; i++) {
-            if (this.participants[i].id === receivers[i].id) {
+            const giverId = this.participants[i].id;
+            const receiverId = receivers[i].id;
+
+            // Check self draw
+            if (giverId === receiverId) {
               valid = false;
               break;
             }
-            this.matches[this.participants[i].id] = receivers[i].id;
+
+            // Check exclusions
+            const isExcluded = this.exclusions.some(e => e.fromId === giverId && e.toId === receiverId);
+            if (isExcluded) {
+              valid = false;
+              break;
+            }
+
+            this.matches[giverId] = receiverId;
           }
         }
 
         if (!valid) {
-          alert('Draw failed to find valid pairings without self-draws. Please try again.');
+          alert('Could not generate valid pairings with the current exclusion rules. Try removing some rules and drawing again.');
           return;
         }
 
