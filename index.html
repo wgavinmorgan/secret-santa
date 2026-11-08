@@ -1005,24 +1005,11 @@
         document.getElementById('reveal-modal').classList.add('hidden');
       }
 
-      // Check URL for reveal link token (#draw=...)
-      checkURLForReveal() {
-        const hash = window.location.hash;
-        if (hash && hash.includes('#draw=')) {
-          try {
-            const rawToken = decodeURIComponent(hash.split('#draw=')[1]);
-            const decoded = JSON.parse(atob(rawToken));
-            if (decoded && decoded.giverId) {
-              setTimeout(() => {
-                this.openDirectReveal(decoded.giverId);
-              }, 500);
-            }
-          } catch (e) {
-            console.error('Failed to parse secret URL token', e);
-          }
-        }
-      }
-
+// Read parameters from either ?draw= or #draw=
+const hash = window.location.hash.substring(1);
+const search = window.location.search.substring(1);
+const urlParams = new URLSearchParams(hash || search);
+const drawData = urlParams.get('draw');
       // Helpers & Utilities
       copyText(text) {
         const tempInput = document.createElement('textarea');
