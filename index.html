@@ -48,7 +48,6 @@
       overflow-x: hidden;
     }
     
-    /* Falling Snow Effect */
     #snow-canvas {
       position: fixed;
       top: 0;
@@ -59,18 +58,13 @@
       z-index: 10;
     }
 
-    /* Card Glow & Glassmorphism */
     .glass-card {
       background: rgba(255, 255, 255, 0.94);
       backdrop-filter: blur(12px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.4);
     }
 
-    /* Gift Box Animation */
-    .gift-container {
-      perspective: 1000px;
-    }
-
+    .gift-container { perspective: 1000px; }
     .gift-box {
       position: relative;
       width: 180px;
@@ -80,17 +74,11 @@
       transform-style: preserve-3d;
       transition: transform 0.6s ease;
     }
-
-    .gift-box:hover {
-      transform: scale(1.05) rotateY(5deg);
-    }
-
+    .gift-box:hover { transform: scale(1.05) rotateY(5deg); }
     .gift-lid {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 180px;
-      height: 45px;
+      top: 0; left: 0;
+      width: 180px; height: 45px;
       background: #C41E3A;
       border-radius: 8px 8px 0 0;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -98,90 +86,43 @@
       transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       transform-origin: top left;
     }
-
-    .gift-box.open .gift-lid {
-      transform: rotate(-110deg) translateY(-20px);
-    }
-
+    .gift-box.open .gift-lid { transform: rotate(-110deg) translateY(-20px); }
     .gift-body {
       position: absolute;
-      top: 40px;
-      left: 10px;
-      width: 160px;
-      height: 130px;
+      top: 40px; left: 10px;
+      width: 160px; height: 130px;
       background: #900C3F;
       border-radius: 0 0 8px 8px;
       box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
     }
-
     .ribbon-v {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 30px;
-      height: 100%;
-      background: #F8B229;
-      box-shadow: 0 0 4px rgba(0,0,0,0.2);
+      position: absolute; left: 50%; transform: translateX(-50%);
+      width: 30px; height: 100%; background: #F8B229;
     }
-
     .ribbon-h {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 100%;
-      height: 30px;
-      background: #F8B229;
-      box-shadow: 0 0 4px rgba(0,0,0,0.2);
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 100%; height: 30px; background: #F8B229;
     }
-
     .bow {
-      position: absolute;
-      top: -25px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 30px;
+      position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
+      width: 60px; height: 30px;
     }
-    
     .bow::before, .bow::after {
-      content: '';
-      position: absolute;
-      width: 30px;
-      height: 25px;
-      border: 4px solid #F8B229;
-      border-radius: 50% 50% 0 50%;
+      content: ''; position: absolute; width: 30px; height: 25px;
+      border: 4px solid #F8B229; border-radius: 50% 50% 0 50%;
     }
-    .bow::before {
-      left: 0;
-      transform: rotate(30deg);
-    }
-    .bow::after {
-      right: 0;
-      transform: rotate(-30deg) scaleX(-1);
-    }
+    .bow::before { left: 0; transform: rotate(30deg); }
+    .bow::after { right: 0; transform: rotate(-30deg) scaleX(-1); }
 
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.05);
-      border-radius: 10px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(22, 91, 51, 0.4);
-      border-radius: 10px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: rgba(22, 91, 51, 0.7);
-    }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(22, 91, 51, 0.4); border-radius: 10px; }
   </style>
 </head>
 <body class="font-sans antialiased text-slate-800 flex flex-col min-h-screen">
   
-  <!-- Falling Snow Canvas -->
   <canvas id="snow-canvas"></canvas>
 
-  <!-- Navigation / Header -->
   <header class="relative z-20 py-6 px-4 text-center border-b border-white/10 bg-slate-900/40 backdrop-blur-md">
     <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3 cursor-pointer" onclick="app.showTab('setup')">
@@ -203,910 +144,71 @@
     </div>
   </header>
 
-  <!-- Main Container -->
   <main class="relative z-20 flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 my-4">
 
-    <!-- VIEW 1: SETUP & PARTICIPANTS -->
+    <!-- SETUP VIEW -->
     <div id="view-setup" class="space-y-6">
-      
-      <!-- Event Settings Card -->
       <div class="glass-card rounded-2xl p-5 md:p-6 border-t-4 border-xmas-red">
         <div class="flex items-center justify-between mb-4 border-b pb-3">
           <h2 class="text-xl font-bold text-xmas-darkred flex items-center gap-2">
             <i class="fa-solid fa-sliders text-xmas-gold"></i> Event Details
           </h2>
-          <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300">
-            Step 1 of 2
-          </span>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Group / Event Name</label>
-            <input type="text" id="event-name" value="Smith Family Christmas 2026" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-xmas-green text-slate-800 text-sm" placeholder="e.g. Miller Family Gift Exchange">
+            <input type="text" id="event-name" value="Morgan Secret Santa 2026" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-xmas-green text-slate-800 text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Suggested Gift Budget</label>
-            <input type="text" id="event-budget" value="$50 Max" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-xmas-green text-slate-800 text-sm" placeholder="e.g. $25 - $50">
+            <input type="text" id="event-budget" value="$50 Max" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-xmas-green text-slate-800 text-sm">
           </div>
         </div>
       </div>
 
-      <!-- Add Participants Card -->
       <div class="glass-card rounded-2xl p-5 md:p-6 border-t-4 border-xmas-green">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 border-b pb-3">
-          <div>
-            <h2 class="text-xl font-bold text-xmas-green flex items-center gap-2">
-              <i class="fa-solid fa-user-plus text-xmas-gold"></i> Add Participants
-            </h2>
-            <p class="text-xs text-slate-500">Add names of family members participating in the draw.</p>
-          </div>
-          <button onclick="app.quickAddPreset()" class="text-xs text-emerald-700 hover:text-emerald-900 font-semibold underline flex items-center gap-1">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> Load Demo Sample
+          <h2 class="text-xl font-bold text-xmas-green flex items-center gap-2">
+            <i class="fa-solid fa-user-plus text-xmas-gold"></i> Add Participants
+          </h2>
+          <button onclick="app.clearAll()" class="text-xs text-red-600 hover:text-red-800 font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-trash-can"></i> Clear All Names
           </button>
         </div>
 
-        <!-- Add Form -->
         <form onsubmit="app.addParticipant(event)" class="flex flex-col sm:flex-row gap-2 mb-6">
           <div class="flex-1">
-            <input type="text" id="new-name" placeholder="Member Name (e.g. Grandma, Uncle Dave)" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-xmas-green text-sm">
+            <input type="text" id="new-name" placeholder="Member Name" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
           </div>
           <div class="sm:w-1/3">
-            <input type="text" id="new-wishlist" placeholder="Optional Wishlist / Hint" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-xmas-green text-sm">
+            <input type="text" id="new-wishlist" placeholder="Optional Wishlist / Hint" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
           </div>
-          <button type="submit" class="bg-xmas-green hover:bg-emerald-800 text-white font-semibold px-5 py-2.5 rounded-xl transition shadow flex items-center justify-center gap-2 text-sm">
+          <button type="submit" class="bg-xmas-green hover:bg-emerald-800 text-white font-semibold px-5 py-2.5 rounded-xl text-sm">
             <i class="fa-solid fa-plus"></i> Add
           </button>
         </form>
 
-        <!-- Participants List -->
-        <div class="space-y-3">
-          <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase px-1">
-            <span>Name & Wishlist</span>
-            <span>Actions</span>
-          </div>
-
-          <div id="participants-list" class="space-y-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
-            <!-- Dynamic Content -->
-          </div>
-        </div>
+        <div id="participants-list" class="space-y-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar"></div>
       </div>
 
-      <!-- Exclusion Rules Card -->
-      <div class="glass-card rounded-2xl p-5 md:p-6 border-t-4 border-xmas-gold">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-            <i class="fa-solid fa-user-slash text-xmas-red"></i> Exclusion Rules (Optional)
-          </h2>
-          <span id="rules-count-badge" class="text-xs bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full font-bold">0 Rules</span>
-        </div>
-        <p class="text-xs text-slate-500 mb-4">Prevent partners/spouses or parents/children from drawing each other.</p>
-
-        <!-- Rule Addition Form -->
-        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex flex-col sm:flex-row items-center gap-2 mb-4">
-          <select id="rule-person-a" class="w-full sm:w-1/2 text-sm px-3 py-2 rounded-lg border border-slate-300 focus:outline-none bg-white">
-            <option value="">Select Person</option>
-          </select>
-          <span class="text-xs font-bold text-red-500 uppercase">cannot draw</span>
-          <select id="rule-person-b" class="w-full sm:w-1/2 text-sm px-3 py-2 rounded-lg border border-slate-300 focus:outline-none bg-white">
-            <option value="">Select Person</option>
-          </select>
-          <button onclick="app.addExclusionRule()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-900 text-white font-medium px-4 py-2 rounded-lg text-sm transition shrink-0">
-            Add Rule
-          </button>
-        </div>
-
-        <!-- Rules Display -->
-        <div id="rules-list" class="flex flex-wrap gap-2">
-          <!-- Dynamic Rules Tags -->
-        </div>
-      </div>
-
-      <!-- Generate Draw CTA Button -->
       <div class="text-center pt-2">
-        <button onclick="app.generateDraw()" class="w-full sm:w-auto bg-gradient-to-r from-xmas-red via-red-600 to-xmas-darkred text-white text-lg font-bold px-10 py-4 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 mx-auto border border-red-400/30">
-          <i class="fa-solid fa-dice text-2xl text-xmas-gold animate-bounce"></i>
+        <button onclick="app.generateDraw()" class="bg-gradient-to-r from-xmas-red via-red-600 to-xmas-darkred text-white text-lg font-bold px-10 py-4 rounded-2xl shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 mx-auto">
+          <i class="fa-solid fa-dice text-2xl text-xmas-gold"></i>
           <span>Perform Christmas Draw!</span>
         </button>
-        <p class="text-xs text-slate-300 mt-2">Draw results are generated instantly with complete randomness and zero self-draws.</p>
       </div>
-
     </div>
 
-    <!-- VIEW 2: RESULTS & SHARING LINKS -->
+    <!-- RESULTS VIEW -->
     <div id="view-results" class="hidden space-y-6">
-      
-      <!-- Top Alert Banner -->
-      <div class="bg-emerald-900/80 border border-emerald-500/40 rounded-2xl p-4 text-white flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg backdrop-blur-md">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-emerald-500/30 flex items-center justify-center shrink-0">
-            <i class="fa-solid fa-circle-check text-emerald-300 text-xl"></i>
-          </div>
-          <div>
-            <h3 class="font-bold text-emerald-100">Draw Successfully Completed! 🎉</h3>
-            <p class="text-xs text-emerald-200">Share individual private links below so everyone sees ONLY their assigned person.</p>
-          </div>
+      <div class="bg-emerald-900/80 border border-emerald-500/40 rounded-2xl p-4 text-white flex justify-between items-center">
+        <div>
+          <h3 class="font-bold text-emerald-100">Draw Completed! 🎉</h3>
+          <p class="text-xs text-emerald-200">Copy the direct texts below to send to everyone.</p>
         </div>
-        <div class="flex items-center gap-2 w-full md:w-auto justify-end">
-          <button onclick="app.showTab('setup')" class="text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-200 px-3.5 py-2 rounded-lg font-medium border border-slate-600">
-            <i class="fa-solid fa-rotate-left mr-1"></i> Redraw / Edit
-          </button>
-        </div>
-      </div>
-
-      <!-- Sharing Methods Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        
-        <!-- Method 1: Copy All SMS -->
-        <div class="glass-card rounded-2xl p-5 border-t-4 border-emerald-600 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center gap-2 mb-2">
-              <i class="fa-solid fa-comments text-emerald-600 text-lg"></i>
-              <h3 class="font-bold text-slate-800">1. Text / SMS Messages</h3>
-            </div>
-            <p class="text-xs text-slate-600 mb-4">Copy pre-written text messages with direct private links ready to paste into your group chat or text messages.</p>
-          </div>
-          <button onclick="app.copyAllTexts()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow">
-            <i class="fa-regular fa-copy"></i> Copy All SMS Messages
-          </button>
-        </div>
-
-        <!-- Method 2: Single Phone Reveal -->
-        <div class="glass-card rounded-2xl p-5 border-t-4 border-xmas-red flex flex-col justify-between">
-          <div>
-            <div class="flex items-center gap-2 mb-2">
-              <i class="fa-solid fa-mobile-screen-button text-xmas-red text-lg"></i>
-              <h3 class="font-bold text-slate-800">2. Pass The Phone Mode</h3>
-            </div>
-            <p class="text-xs text-slate-600 mb-4">Together in person? Pass your phone around. Each person taps their name to reveal their match in secret.</p>
-          </div>
-          <button onclick="app.openPassPhoneModal()" class="w-full bg-xmas-red hover:bg-red-800 text-white font-medium py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow">
-            <i class="fa-solid fa-eye-slash"></i> Pass Around Phone
-          </button>
-        </div>
-
-        <!-- Method 3: Export Backup -->
-        <div class="glass-card rounded-2xl p-5 border-t-4 border-amber-500 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center gap-2 mb-2">
-              <i class="fa-solid fa-shield-halved text-amber-600 text-lg"></i>
-              <h3 class="font-bold text-slate-800">3. Master Record (Admin)</h3>
-            </div>
-            <p class="text-xs text-slate-600 mb-4">Keep a secret backup record or view all matches in case someone forgets who they drew!</p>
-          </div>
-          <button onclick="app.toggleMasterListModal()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow">
-            <i class="fa-solid fa-key"></i> Reveal All Matches
-          </button>
-        </div>
-
-      </div>
-
-      <!-- Individual Participants Links Card -->
-      <div class="glass-card rounded-2xl p-5 md:p-6 border-t-4 border-slate-700">
-        <h3 class="font-bold text-slate-800 text-lg mb-1 flex items-center gap-2">
-          <i class="fa-solid fa-paper-plane text-xmas-green"></i> Participant Links & Direct Texts
-        </h3>
-        <p class="text-xs text-slate-500 mb-4">Send these links individually to keep the drawing 100% secret!</p>
-
-        <div id="results-list" class="space-y-3 max-h-96 overflow-y-auto pr-1 custom-scrollbar">
-          <!-- Dynamic Links List -->
-        </div>
-      </div>
-
-    </div>
-
-  </main>
-
-  <!-- MODAL: REVEAL DRAW (When opened via direct Secret Link or Pass-Phone) -->
-  <div id="reveal-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
-    <div class="relative w-full max-w-md bg-gradient-to-b from-slate-900 to-slate-800 border border-amber-500/30 rounded-3xl p-6 text-center text-white shadow-2xl overflow-hidden">
-      
-      <button onclick="app.closeRevealModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-      <!-- Step 1: Confirmation Screen -->
-      <div id="reveal-step-confirm" class="space-y-4 py-4">
-        <div class="w-16 h-16 bg-xmas-red/20 rounded-full flex items-center justify-center mx-auto text-xmas-gold text-3xl border border-xmas-gold/40">
-          <i class="fa-solid fa-user-lock"></i>
-        </div>
-        <h3 class="font-festive text-3xl text-xmas-gold font-bold" id="reveal-target-name">Hello, Participant!</h3>
-        <p class="text-sm text-slate-300">Are you sure you want to reveal your Secret Santa recipient now?</p>
-        <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-200/80">
-          ⚠️ Make sure nobody else is looking over your shoulder!
-        </div>
-        <button onclick="app.proceedToUnwrap()" class="w-full bg-xmas-red hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-eye"></i> Yes, Show My Recipient!
+        <button onclick="app.showTab('setup')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-2 rounded-lg">
+          <i class="fa-solid fa-rotate-left mr-1"></i> Edit Setup
         </button>
       </div>
 
-      <!-- Step 2: Gift Unwrapping Animation -->
-      <div id="reveal-step-unwrap" class="hidden space-y-4 py-6">
-        <p class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Tap the gift to unwrap!</p>
-        
-        <div class="gift-container my-6">
-          <div id="interactive-gift" onclick="app.unwrapGiftAnimation()" class="gift-box">
-            <div class="bow"></div>
-            <div class="gift-lid">
-              <div class="ribbon-v"></div>
-            </div>
-            <div class="gift-body">
-              <div class="ribbon-v"></div>
-              <div class="ribbon-h"></div>
-            </div>
-          </div>
-        </div>
-        <p class="text-xs text-slate-400 italic">Click the present box to open!</p>
-      </div>
-
-      <!-- Step 3: Final Reveal Screen -->
-      <div id="reveal-step-final" class="hidden space-y-4 py-2">
-        <span class="inline-block text-4xl animate-bounce">🎅</span>
-        <p class="text-xs text-amber-300 font-bold uppercase tracking-wider">You Drew:</p>
-        
-        <div class="bg-gradient-to-r from-amber-500/20 via-xmas-gold/30 to-amber-500/20 border border-xmas-gold/50 rounded-2xl p-4 my-2">
-          <h2 id="assigned-person-name" class="font-festive text-4xl md:text-5xl font-bold text-xmas-gold drop-shadow">
-            [Recipient Name]
-          </h2>
-        </div>
-
-        <div id="assigned-person-wishlist-box" class="bg-slate-800/90 rounded-xl p-3 text-left border border-slate-700 text-xs text-slate-300 space-y-1">
-          <span class="font-bold text-emerald-400 flex items-center gap-1">
-            <i class="fa-solid fa-list-check"></i> Wishlist / Idea:
-          </span>
-          <p id="assigned-person-wishlist" class="italic text-slate-200">"No specific wishlist provided."</p>
-        </div>
-
-        <div class="bg-slate-800/50 rounded-xl p-2.5 text-xs text-slate-400 border border-slate-700/50 flex justify-between items-center">
-          <span>Budget Target:</span>
-          <span id="assigned-event-budget" class="font-bold text-amber-300">-$50-</span>
-        </div>
-
-        <button onclick="app.closeRevealModal()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-2.5 rounded-xl text-xs transition mt-4">
-          Done & Hide Screen
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- MODAL: PASS THE PHONE SELECTION -->
-  <div id="pass-phone-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
-    <div class="relative w-full max-w-md bg-white rounded-3xl p-6 text-slate-800 shadow-2xl">
-      <div class="flex justify-between items-center border-b pb-3 mb-4">
-        <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
-          <i class="fa-solid fa-mobile-screen text-xmas-red"></i> Select Your Name
-        </h3>
-        <button onclick="app.closePassPhoneModal()" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <p class="text-xs text-slate-500 mb-4">Tap on your name to open your secret gift assignment.</p>
-      
-      <div id="pass-phone-list" class="space-y-2 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
-        <!-- Dynamic list of participants for phone reveal -->
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: MASTER LIST ADMIN VIEW -->
-  <div id="master-list-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
-    <div class="relative w-full max-w-lg bg-white rounded-3xl p-6 text-slate-800 shadow-2xl">
-      <div class="flex justify-between items-center border-b pb-3 mb-3">
-        <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
-          <i class="fa-solid fa-user-shield text-slate-700"></i> Master Draw Record
-        </h3>
-        <button onclick="app.toggleMasterListModal()" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <p class="text-xs text-slate-500 mb-4">⚠️ Admin Eyes Only! Full list of matches for reference.</p>
-      
-      <div id="master-matches-container" class="space-y-2 max-h-72 overflow-y-auto custom-scrollbar border rounded-xl p-3 bg-slate-50">
-        <!-- Master pairs list -->
-      </div>
-
-      <div class="mt-4 flex justify-end">
-        <button onclick="app.toggleMasterListModal()" class="bg-slate-800 text-white font-medium px-4 py-2 rounded-xl text-xs">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast Notification Container -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl border border-amber-400/40 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2">
-    <i class="fa-solid fa-circle-info text-xmas-gold"></i>
-    <span id="toast-message">Notification message</span>
-  </div>
-
-  <!-- Footer -->
-  <footer class="relative z-20 py-4 text-center text-xs text-slate-400 border-t border-white/5 mt-auto">
-    <p>🎄 Spread Holiday Joy! No logins or downloads required. 🎅</p>
-  </footer>
-
-  <!-- Application Logic -->
-  <script>
-    // Audio Synth for Sound Effects without external sound URLs
-    const SoundFX = {
-      ctx: null,
-      init() {
-        if (!this.ctx) {
-          const AudioCtx = window.AudioContext || window.webkitAudioContext;
-          if (AudioCtx) this.ctx = new AudioCtx();
-        }
-      },
-      playChime() {
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, now); // C5
-        osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.4); // C6
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.5);
-      },
-      playUnwrap() {
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(261.63, now);
-        osc.frequency.setValueAtTime(329.63, now + 0.1);
-        osc.frequency.setValueAtTime(392.00, now + 0.2);
-        osc.frequency.setValueAtTime(523.25, now + 0.3);
-        gain.gain.setValueAtTime(0.4, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.6);
-      }
-    };
-
-    // Secret Santa App State & Core Logic
-    class SecretSantaApp {
-      constructor() {
-        this.state = {
-          eventName: 'Smith Family Christmas 2026',
-          budget: '$50 Max',
-          participants: [], // { id, name, wishlist }
-          exclusions: [],   // [ { fromId, toId } ]
-          matches: {}       // { giverId: receiverId }
-        };
-
-        this.currentRevealGiverId = null;
-        this.initApp();
-      }
-
-      initApp() {
-        this.loadState();
-        this.renderParticipants();
-        this.renderExclusionDropdowns();
-        this.renderExclusionRules();
-
-        // Check if opened via URL hash containing direct secret reveal link
-        this.checkURLForReveal();
-
-        // Synchronize Event Inputs
-        document.getElementById('event-name').value = this.state.eventName;
-        document.getElementById('event-budget').value = this.state.budget;
-        document.getElementById('event-name').addEventListener('input', (e) => {
-          this.state.eventName = e.target.value;
-          this.saveState();
-        });
-        document.getElementById('event-budget').addEventListener('input', (e) => {
-          this.state.budget = e.target.value;
-          this.saveState();
-        });
-      }
-
-      saveState() {
-        try {
-          localStorage.setItem('xmas_draw_state', JSON.stringify(this.state));
-        } catch (e) {
-          console.warn('LocalStorage save failed:', e);
-        }
-      }
-
-      loadState() {
-        try {
-          const saved = localStorage.getItem('xmas_draw_state');
-          if (saved) {
-            this.state = Object.assign(this.state, JSON.parse(saved));
-          } else {
-            // Default preset sample data
-            this.loadPresetData();
-          }
-        } catch (e) {
-          this.loadPresetData();
-        }
-      }
-
-      loadPresetData() {
-        this.state.eventName = 'Smith Family Christmas 2026';
-        this.state.budget = '$50 Max';
-        this.state.participants = [
-          { id: '1', name: 'Grandma Ellen', wishlist: 'Warm cozy sweater or puzzle' },
-          { id: '2', name: 'Uncle Mark', wishlist: 'Coffee beans or gourmet snacks' },
-          { id: '3', name: 'Aunt Sarah', wishlist: 'Scented candles / Gardening tools' },
-          { id: '4', name: 'Cousin Leo', wishlist: 'Board games or Amazon gift card' },
-          { id: '5', name: 'Emily', wishlist: 'Wool socks, books, or tea selection' }
-        ];
-        // Sample exclusion: Uncle Mark & Aunt Sarah shouldn't draw each other
-        this.state.exclusions = [
-          { fromId: '2', toId: '3' },
-          { fromId: '3', toId: '2' }
-        ];
-        this.state.matches = {};
-      }
-
-      quickAddPreset() {
-        this.loadPresetData();
-        this.saveState();
-        this.renderParticipants();
-        this.renderExclusionDropdowns();
-        this.renderExclusionRules();
-        this.showToast('Sample family list loaded!');
-      }
-
-      // UI Tab Navigation
-      showTab(tabName) {
-        const viewSetup = document.getElementById('view-setup');
-        const viewResults = document.getElementById('view-results');
-        const btnSetup = document.getElementById('nav-setup-btn');
-        const btnResults = document.getElementById('nav-results-btn');
-
-        if (tabName === 'setup') {
-          viewSetup.classList.remove('hidden');
-          viewResults.classList.add('hidden');
-          btnSetup.className = "px-4 py-1.5 rounded-full font-medium transition-all text-white bg-xmas-red shadow";
-          btnResults.className = "px-4 py-1.5 rounded-full font-medium transition-all text-slate-300 hover:text-white";
-        } else {
-          if (Object.keys(this.state.matches).length === 0) {
-            this.showToast('Please generate the draw first!');
-            return;
-          }
-          viewSetup.classList.add('hidden');
-          viewResults.classList.remove('hidden');
-          btnResults.className = "px-4 py-1.5 rounded-full font-medium transition-all text-white bg-xmas-red shadow";
-          btnSetup.className = "px-4 py-1.5 rounded-full font-medium transition-all text-slate-300 hover:text-white";
-          this.renderResults();
-        }
-      }
-
-      // Participant Management
-      addParticipant(e) {
-        e.preventDefault();
-        const nameInput = document.getElementById('new-name');
-        const wishlistInput = document.getElementById('new-wishlist');
-
-        const name = nameInput.value.trim();
-        const wishlist = wishlistInput.value.trim();
-
-        if (!name) return;
-
-        const newId = Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
-        this.state.participants.push({ id: newId, name, wishlist });
-        
-        nameInput.value = '';
-        wishlistInput.value = '';
-        nameInput.focus();
-
-        this.saveState();
-        this.renderParticipants();
-        this.renderExclusionDropdowns();
-        this.showToast(`Added ${name}`);
-      }
-
-      removeParticipant(id) {
-        this.state.participants = this.state.participants.filter(p => p.id !== id);
-        this.state.exclusions = this.state.exclusions.filter(e => e.fromId !== id && e.toId !== id);
-        this.state.matches = {};
-        this.saveState();
-        this.renderParticipants();
-        this.renderExclusionDropdowns();
-        this.renderExclusionRules();
-      }
-
-      renderParticipants() {
-        const container = document.getElementById('participants-list');
-        if (this.state.participants.length === 0) {
-          container.innerHTML = `
-            <div class="text-center py-6 text-slate-400 text-sm border-2 border-dashed border-slate-200 rounded-xl">
-              No family members added yet. Add at least 3 people!
-            </div>
-          `;
-          return;
-        }
-
-        container.innerHTML = this.state.participants.map(p => `
-          <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-slate-300 transition">
-            <div class="flex-1 pr-2">
-              <div class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                <span>${this.escapeHtml(p.name)}</span>
-              </div>
-              ${p.wishlist ? `<p class="text-xs text-slate-500 italic flex items-center gap-1 mt-0.5"><i class="fa-solid fa-gift text-amber-500 text-[10px]"></i> ${this.escapeHtml(p.wishlist)}</p>` : ''}
-            </div>
-            <button onclick="app.removeParticipant('${p.id}')" class="text-slate-400 hover:text-red-600 p-2 text-sm transition" title="Remove member">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-          </div>
-        `).join('');
-      }
-
-      // Exclusion Rules
-      renderExclusionDropdowns() {
-        const selectA = document.getElementById('rule-person-a');
-        const selectB = document.getElementById('rule-person-b');
-
-        const options = ['<option value="">Select Person</option>'].concat(
-          this.state.participants.map(p => `<option value="${p.id}">${this.escapeHtml(p.name)}</option>`)
-        ).join('');
-
-        selectA.innerHTML = options;
-        selectB.innerHTML = options;
-      }
-
-      addExclusionRule() {
-        const selectA = document.getElementById('rule-person-a');
-        const selectB = document.getElementById('rule-person-b');
-
-        const fromId = selectA.value;
-        const toId = selectB.value;
-
-        if (!fromId || !toId) {
-          this.showToast('Select two participants to create a rule!');
-          return;
-        }
-        if (fromId === toId) {
-          this.showToast('A person cannot be excluded from drawing themselves!');
-          return;
-        }
-
-        const exists = this.state.exclusions.some(e => e.fromId === fromId && e.toId === toId);
-        if (!exists) {
-          this.state.exclusions.push({ fromId, toId });
-          this.saveState();
-          this.renderExclusionRules();
-          this.showToast('Exclusion rule added!');
-        }
-      }
-
-      removeExclusionRule(index) {
-        this.state.exclusions.splice(index, 1);
-        this.saveState();
-        this.renderExclusionRules();
-      }
-
-      renderExclusionRules() {
-        const container = document.getElementById('rules-list');
-        const badge = document.getElementById('rules-count-badge');
-        badge.innerText = `${this.state.exclusions.length} Rules`;
-
-        if (this.state.exclusions.length === 0) {
-          container.innerHTML = `<span class="text-xs text-slate-400 italic">No exclusion rules set. Anyone can draw anyone.</span>`;
-          return;
-        }
-
-        container.innerHTML = this.state.exclusions.map((rule, idx) => {
-          const personA = this.state.participants.find(p => p.id === rule.fromId)?.name || 'Unknown';
-          const personB = this.state.participants.find(p => p.id === rule.toId)?.name || 'Unknown';
-          return `
-            <span class="inline-flex items-center gap-1.5 bg-red-50 text-red-700 border border-red-200 text-xs px-2.5 py-1 rounded-full font-medium">
-              <span>${this.escapeHtml(personA)}</span>
-              <i class="fa-solid fa-ban text-[10px] text-red-400"></i>
-              <span>${this.escapeHtml(personB)}</span>
-              <button onclick="app.removeExclusionRule(${idx})" class="ml-1 text-red-400 hover:text-red-700">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-            </span>
-          `;
-        }).join('');
-      }
-
-      // Draw Algorithm (Backtracking Secret Santa Resolver)
-      generateDraw() {
-        const givers = [...this.state.participants];
-        if (givers.length < 3) {
-          this.showToast('Please add at least 3 participants for a secret draw!');
-          return;
-        }
-
-        let solution = null;
-        const maxAttempts = 500;
-
-        for (let attempt = 0; attempt < maxAttempts; attempt++) {
-          solution = this.attemptMatching(givers);
-          if (solution) break;
-        }
-
-        if (!solution) {
-          this.showToast('Impossible to satisfy all exclusion rules! Try removing a rule.');
-          return;
-        }
-
-        this.state.matches = solution;
-        this.saveState();
-        SoundFX.playChime();
-        confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 } });
-        
-        this.showTab('results');
-        this.showToast('Secret Santa draw completed successfully!');
-      }
-
-      attemptMatching(participants) {
-        const receivers = [...participants];
-        // Shuffle receivers
-        for (let i = receivers.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [receivers[i], receivers[j]] = [receivers[j], receivers[i]];
-        }
-
-        const result = {};
-        for (let i = 0; i < participants.length; i++) {
-          const giver = participants[i];
-          const receiver = receivers[i];
-
-          // Check self-draw condition
-          if (giver.id === receiver.id) return null;
-
-          // Check exclusion rules
-          const isExcluded = this.state.exclusions.some(
-            rule => rule.fromId === giver.id && rule.toId === receiver.id
-          );
-          if (isExcluded) return null;
-
-          result[giver.id] = receiver.id;
-        }
-
-        return result;
-      }
-
-      // Render Results Page & Sharing Links
-      renderResults() {
-        const container = document.getElementById('results-list');
-        const baseUrl = window.location.origin + window.location.pathname;
-
-        container.innerHTML = this.state.participants.map(p => {
-          const secretToken = btoa(JSON.stringify({
-            giverId: p.id,
-            eventId: this.state.eventName
-          }));
-          const revealLink = `${baseUrl}#draw=${encodeURIComponent(secretToken)}`;
-          const smsText = `Hi ${p.name}! Click here to view your secret Christmas present recipient for ${this.state.eventName}: ${revealLink}`;
-
-          return `
-            <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-full bg-xmas-red/10 text-xmas-red font-bold flex items-center justify-center text-sm border border-xmas-red/20">
-                  ${p.name.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 text-sm">${this.escapeHtml(p.name)}</h4>
-                  <p class="text-[11px] text-slate-400 truncate max-w-xs md:max-w-sm">${revealLink}</p>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                <button onclick="app.copyText('${this.escapeJsString(smsText)}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-3 py-1.5 rounded-lg text-xs transition flex items-center gap-1.5 border border-slate-300">
-                  <i class="fa-regular fa-copy text-emerald-600"></i> Copy SMS
-                </button>
-                <button onclick="app.openDirectReveal('${p.id}')" class="bg-xmas-green hover:bg-emerald-800 text-white font-medium px-3 py-1.5 rounded-lg text-xs transition flex items-center gap-1.5 shadow-sm">
-                  <i class="fa-solid fa-eye"></i> View
-                </button>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      // Pass Around Phone Mode Modal
-      openPassPhoneModal() {
-        const container = document.getElementById('pass-phone-list');
-        container.innerHTML = this.state.participants.map(p => `
-          <button onclick="app.closePassPhoneModal(); app.openDirectReveal('${p.id}');" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-xmas-green hover:bg-emerald-50/50 transition flex items-center justify-between group">
-            <span class="font-semibold text-slate-800 text-sm group-hover:text-xmas-green">${this.escapeHtml(p.name)}</span>
-            <span class="text-xs text-emerald-700 font-medium">Tap to Reveal <i class="fa-solid fa-chevron-right ml-1"></i></span>
-          </button>
-        `).join('');
-
-        document.getElementById('pass-phone-modal').classList.remove('hidden');
-      }
-
-      closePassPhoneModal() {
-        document.getElementById('pass-phone-modal').classList.add('hidden');
-      }
-
-      // Master List Modal
-      toggleMasterListModal() {
-        const modal = document.getElementById('master-list-modal');
-        const container = document.getElementById('master-matches-container');
-
-        if (modal.classList.contains('hidden')) {
-          container.innerHTML = this.state.participants.map(giver => {
-            const receiverId = this.state.matches[giver.id];
-            const receiver = this.state.participants.find(p => p.id === receiverId);
-            return `
-              <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-200 last:border-none">
-                <span class="font-bold text-slate-700">${this.escapeHtml(giver.name)}</span>
-                <i class="fa-solid fa-arrow-right text-slate-400"></i>
-                <span class="font-bold text-xmas-red">${receiver ? this.escapeHtml(receiver.name) : 'None'}</span>
-              </div>
-            `;
-          }).join('');
-          modal.classList.remove('hidden');
-        } else {
-          modal.classList.add('hidden');
-        }
-      }
-
-      // Secret Reveal Modal Sequence
-      openDirectReveal(giverId) {
-        this.currentRevealGiverId = giverId;
-        const giver = this.state.participants.find(p => p.id === giverId);
-        if (!giver) return;
-
-        document.getElementById('reveal-target-name').innerText = `Hello, ${giver.name}!`;
-
-        // Reset Steps
-        document.getElementById('reveal-step-confirm').classList.remove('hidden');
-        document.getElementById('reveal-step-unwrap').classList.add('hidden');
-        document.getElementById('reveal-step-final').classList.add('hidden');
-        document.getElementById('interactive-gift').classList.remove('open');
-
-        document.getElementById('reveal-modal').classList.remove('hidden');
-      }
-
-      proceedToUnwrap() {
-        document.getElementById('reveal-step-confirm').classList.add('hidden');
-        document.getElementById('reveal-step-unwrap').classList.remove('hidden');
-      }
-
-      unwrapGiftAnimation() {
-        const giftBox = document.getElementById('interactive-gift');
-        if (giftBox.classList.contains('open')) return;
-
-        giftBox.classList.add('open');
-        SoundFX.playUnwrap();
-
-        setTimeout(() => {
-          this.showFinalAssignedPerson();
-        }, 800);
-      }
-
-      showFinalAssignedPerson() {
-        const giverId = this.currentRevealGiverId;
-        const receiverId = this.state.matches[giverId];
-        const receiver = this.state.participants.find(p => p.id === receiverId);
-
-        if (!receiver) {
-          this.showToast('Could not load assignment details!');
-          return;
-        }
-
-        document.getElementById('assigned-person-name').innerText = receiver.name;
-        document.getElementById('assigned-person-wishlist').innerText = receiver.wishlist ? `"${receiver.wishlist}"` : 'No specific wishlist provided.';
-        document.getElementById('assigned-event-budget').innerText = this.state.budget || 'Flexible';
-
-        document.getElementById('reveal-step-unwrap').classList.add('hidden');
-        document.getElementById('reveal-step-final').classList.remove('hidden');
-
-        confetti({ particleCount: 50, spread: 50, origin: { y: 0.6 } });
-      }
-
-      closeRevealModal() {
-        document.getElementById('reveal-modal').classList.add('hidden');
-      }
-
-// Read parameters from either ?draw= or #draw=
-const hash = window.location.hash.substring(1);
-const search = window.location.search.substring(1);
-const urlParams = new URLSearchParams(hash || search);
-const drawData = urlParams.get('draw');
-      // Helpers & Utilities
-      copyText(text) {
-        const tempInput = document.createElement('textarea');
-        tempInput.value = text;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-        this.showToast('Message copied to clipboard!');
-      }
-
-      copyAllTexts() {
-        const baseUrl = window.location.origin + window.location.pathname;
-        let compiled = `🎄 ${this.state.eventName} Secret Santa Links 🎁\n\n`;
-
-        this.state.participants.forEach(p => {
-          const secretToken = btoa(JSON.stringify({
-            giverId: p.id,
-            eventId: this.state.eventName
-          }));
-          const revealLink = `${baseUrl}#draw=${encodeURIComponent(secretToken)}`;
-          compiled += `${p.name}: ${revealLink}\n`;
-        });
-
-        this.copyText(compiled);
-      }
-
-      showToast(msg) {
-        const toast = document.getElementById('toast');
-        const toastMsg = document.getElementById('toast-message');
-        toastMsg.innerText = msg;
-        toast.classList.remove('translate-y-20', 'opacity-0');
-        setTimeout(() => {
-          toast.classList.add('translate-y-20', 'opacity-0');
-        }, 3000);
-      }
-
-      escapeHtml(str) {
-        return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-      }
-
-      escapeJsString(str) {
-        return (str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n');
-      }
-    }
-
-    // Canvas Falling Snow Animation Component
-    function initSnow() {
-      const canvas = document.getElementById('snow-canvas');
-      const ctx = canvas.getContext('2d');
-      let width = (canvas.width = window.innerWidth);
-      let height = (canvas.height = window.innerHeight);
-
-      window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      });
-
-      const flakes = Array.from({ length: 65 }).map(() => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: Math.random() * 3 + 1,
-        d: Math.random() * 1 + 0.5,
-        opacity: Math.random() * 0.7 + 0.3
-      }));
-
-      function render() {
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = 'white';
-
-        flakes.forEach(flake => {
-          ctx.beginPath();
-          ctx.globalAlpha = flake.opacity;
-          ctx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
-          ctx.fill();
-
-          flake.y += flake.d;
-          flake.x += Math.sin(flake.y / 30) * 0.5;
-
-          if (flake.y > height) {
-            flake.y = -5;
-            flake.x = Math.random() * width;
-          }
-        });
-
-        requestAnimationFrame(render);
-      }
-
-      render();
-    }
-
-    // Initialize application on window load
-    let app;
-    window.onload = function() {
-      initSnow();
-      app = new SecretSantaApp();
-    };
-  </script>
-</body>
-</html>
+      <div class="glass-card rounded-2xl p-5 md:p
