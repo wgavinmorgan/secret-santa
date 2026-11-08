@@ -87,16 +87,17 @@
       <div class="glass-card rounded-2xl p-6 border-t-4 border-xmas-green">
         <div class="flex justify-between items-center mb-4 border-b pb-3">
           <h2 class="text-xl font-bold text-xmas-green">1. Add Participants</h2>
-          <button onclick="app.clearAll()" class="text-xs text-red-600 font-semibold">Clear All Names</button>
+          <button type="button" onclick="app.clearAll()" class="text-xs text-red-600 font-semibold">Clear All Names</button>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-2 mb-6">
-          <input type="text" id="new-name" placeholder="Member Name" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
-          <input type="text" id="new-wishlist" placeholder="Optional Wishlist / Hint" class="sm:w-1/3 px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
-          <button type="button" onclick="app.addParticipant()" class="bg-xmas-green hover:bg-emerald-800 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition">
+        <!-- Add Form with Enter Key Support -->
+        <form onsubmit="app.addParticipant(event)" class="flex flex-col sm:flex-row gap-2 mb-6">
+          <input type="text" id="new-name" placeholder="Member Name" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-xmas-green">
+          <input type="text" id="new-wishlist" placeholder="Optional Wishlist / Hint" class="sm:w-1/3 px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-xmas-green">
+          <button type="submit" class="bg-xmas-green hover:bg-emerald-800 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition">
             Add Person
           </button>
-        </div>
+        </form>
 
         <div id="participants-list" class="space-y-2 max-h-64 overflow-y-auto"></div>
       </div>
@@ -226,7 +227,9 @@
         this.renderExclusions();
       }
 
-      addParticipant() {
+      addParticipant(e) {
+        if (e) e.preventDefault(); // Prevents page reload on Enter key press
+
         const nameInput = document.getElementById('new-name');
         const wishlistInput = document.getElementById('new-wishlist');
         const name = nameInput.value.trim();
@@ -239,6 +242,8 @@
         
         nameInput.value = '';
         wishlistInput.value = '';
+        nameInput.focus(); // Automatically places cursor back in the name box for fast typing
+
         this.saveState();
         this.renderParticipants();
         this.renderDropdowns();
@@ -256,7 +261,7 @@
       renderParticipants() {
         const container = document.getElementById('participants-list');
         if (this.participants.length === 0) {
-          container.innerHTML = `<div class="text-center py-4 text-slate-400 text-xs">No participants added yet. Enter names above!</div>`;
+          container.innerHTML = `<div class="text-center py-4 text-slate-400 text-xs">No participants added yet. Type a name above and press Enter!</div>`;
           return;
         }
         container.innerHTML = this.participants.map(p => `
@@ -265,7 +270,7 @@
               <span class="font-bold text-slate-800 text-sm">${p.name}</span>
               ${p.wishlist ? `<p class="text-xs text-slate-500 italic">${p.wishlist}</p>` : ''}
             </div>
-            <button onclick="app.removeParticipant('${p.id}')" class="text-slate-400 hover:text-red-600 p-2">
+            <button type="button" onclick="app.removeParticipant('${p.id}')" class="text-slate-400 hover:text-red-600 p-2">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
@@ -333,7 +338,7 @@
           return `
             <div class="bg-amber-100/80 border border-amber-300 text-amber-900 text-xs px-3 py-1.5 rounded-full flex items-center gap-2">
               <span><b>${nameA}</b> ❌ <b>${nameB}</b></span>
-              <button onclick="app.removeExclusion(${index})" class="text-amber-700 hover:text-red-700 font-bold">✕</button>
+              <button type="button" onclick="app.removeExclusion(${index})" class="text-amber-700 hover:text-red-700 font-bold">✕</button>
             </div>
           `;
         }).join('');
@@ -341,133 +346,4 @@
 
       generateDraw() {
         if (this.participants.length < 3) {
-          alert('Please add at least 3 people to perform a Secret Santa draw.');
-          return;
-        }
-
-        let receivers = [...this.participants];
-        let valid = false;
-        let attempts = 0;
-
-        while (!valid && attempts < 500) {
-          attempts++;
-          valid = true;
-          receivers = [...this.participants].sort(() => Math.random() - 0.5);
-          this.matches = {};
-
-          for (let i = 0; i < this.participants.length; i++) {
-            const giverId = this.participants[i].id;
-            const receiverId = receivers[i].id;
-
-            // Check self draw
-            if (giverId === receiverId) {
-              valid = false;
-              break;
-            }
-
-            // Check exclusions
-            const isExcluded = this.exclusions.some(e => e.fromId === giverId && e.toId === receiverId);
-            if (isExcluded) {
-              valid = false;
-              break;
-            }
-
-            this.matches[giverId] = receiverId;
-          }
-        }
-
-        if (!valid) {
-          alert('Could not generate valid pairings with the current exclusion rules. Try removing some rules and drawing again.');
-          return;
-        }
-
-        this.showTab('results');
-      }
-
-      showTab(tab) {
-        document.getElementById('view-setup').classList.toggle('hidden', tab !== 'setup');
-        document.getElementById('view-results').classList.toggle('hidden', tab !== 'results');
-        if (tab === 'results') this.renderResults();
-      }
-
-      renderResults() {
-        const container = document.getElementById('results-list');
-        const baseUrl = window.location.href.split('#')[0].split('?')[0];
-
-        container.innerHTML = this.participants.map(p => {
-          const receiverId = this.matches[p.id];
-          const receiver = this.participants.find(r => r.id === receiverId);
-          
-          const payload = {
-            giverName: p.name,
-            receiverName: receiver ? receiver.name : '',
-            receiverWishlist: receiver ? receiver.wishlist : ''
-          };
-
-          const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-          const secretUrl = `${baseUrl}#draw=${encoded}`;
-          const smsText = `Hi ${p.name}! Click here to view your secret Christmas present recipient: ${secretUrl}`;
-
-          return `
-            <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
-              <div class="flex justify-between items-center">
-                <span class="font-bold text-slate-800 text-sm">${p.name}</span>
-                <button onclick="navigator.clipboard.writeText('${smsText}'); alert('SMS text copied to clipboard!');" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3 py-1.5 rounded-lg">
-                  Copy SMS Text
-                </button>
-              </div>
-              <input type="text" readonly value="${secretUrl}" class="w-full text-xs bg-slate-50 border p-2 rounded text-slate-500 select-all">
-            </div>
-          `;
-        }).join('');
-      }
-
-      checkURLForReveal() {
-        const hash = window.location.hash.substring(1);
-        if (hash.includes('draw=')) {
-          const encoded = hash.split('draw=')[1];
-          try {
-            const data = JSON.parse(decodeURIComponent(escape(atob(encoded))));
-            this.showRevealModal(data);
-          } catch (e) {
-            console.error('Failed to parse reveal URL:', e);
-          }
-        }
-      }
-
-      showRevealModal(data) {
-        document.getElementById('reveal-target-name').innerText = `Hello, ${data.giverName}!`;
-        document.getElementById('assigned-person-name').innerText = data.receiverName;
-        document.getElementById('assigned-person-wishlist').innerText = data.receiverWishlist || 'No specific wishlist provided.';
-
-        document.getElementById('reveal-step-confirm').classList.remove('hidden');
-        document.getElementById('reveal-step-unwrap').classList.add('hidden');
-        document.getElementById('reveal-step-final').classList.add('hidden');
-
-        document.getElementById('reveal-modal').classList.remove('hidden');
-      }
-
-      proceedToUnwrap() {
-        document.getElementById('reveal-step-confirm').classList.add('hidden');
-        document.getElementById('reveal-step-unwrap').classList.remove('hidden');
-      }
-
-      unwrapGiftAnimation() {
-        const box = document.getElementById('interactive-gift');
-        box.classList.add('open');
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        setTimeout(() => {
-          document.getElementById('reveal-step-unwrap').classList.add('hidden');
-          document.getElementById('reveal-step-final').classList.remove('hidden');
-        }, 900);
-      }
-
-      closeRevealModal() {
-        document.getElementById('reveal-modal').classList.add('hidden');
-      }
-    }
-
-    const app = new SecretSantaApp();
-  </script>
-</body>
-</html>
+          alert('Please
